@@ -11,10 +11,12 @@ const params = {
 }
 
 // send to async command to create cnx and send omd
-async function init(text: string) {
+async function init() {
 	const _con = new Telnet()
 	try {
 		await _con.connect(params)
+		await _con.send("print('Aaaaa') #test ")
+
 	} catch(err){
 		console.log(err)
 	}
@@ -36,12 +38,14 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "first-addons" is now active!');
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('first-addons.helloWorld', () => {
+		init()
+		.then((a) => console.log("ok"))
+		.catch((err) => console.log(`err : ${err}`))
 		var editor = vscode.window.activeTextEditor;
 		if (!editor) {
 			return; // No open text editor
@@ -53,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from First_Addons!');
+		vscode.window.showInformationMessage(text);
 	});
 
 	context.subscriptions.push(disposable);
