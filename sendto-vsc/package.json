@@ -1,7 +1,7 @@
 {
-	"name": "sendto-vsc",
-	"displayName": "Sendto-vsc",
-	"description": "send cmd to socket server",
+	"name": "shellserver-vsc",
+	"displayName": "ShellServer-vsc",
+	"description": "send python cmd to shellServer",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.22.0"
@@ -10,28 +10,28 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:sendto-vsc.setport",
-		"onCommand:sendto-vsc.sendto"
+		"onCommand:shellserver-vsc.setport",
+		"onCommand:shellserver-vsc.sendto"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "sendto-vsc.setport",
+				"command": "shellserver-vsc.setport",
 				"title": "Set Port"
 			},
 			{
-				"command": "sendto-vsc.sendto",
+				"command": "shellserver-vsc.sendto",
 				"title": "Send To"
 			}
 		],
 		"keybindings": [
 			{
-				"command": "sendto-vsc.sendto",
+				"command": "shellserver-vsc.sendto",
 				"key": "ctrl+e ctrl+e"
 			},
 			{
-				"command": "sendto-vsc.setport",
+				"command": "shellserver-vsc.setport",
 				"key": "shift+ctrl+e"
 			}
 		]

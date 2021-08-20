@@ -28,7 +28,7 @@ async function send_to(text: string, port:number = 2017) {
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	let tempPort = -1;
-	let setPortDisposable = vscode.commands.registerCommand('sendto-vsc.setport', async function (event) {
+	let setPortDisposable = vscode.commands.registerCommand('shellserver-vsc.setport', async function (event) {
 		await vscode.window.showInputBox().then((value:any) =>{
 			if(!isNaN(value)) {
 				tempPort = Number(value)
@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 		console.log(tempPort);
 	});
 
-	let sendToDisposable = vscode.commands.registerCommand('sendto-vsc.sendto', () => {
+	let sendToDisposable = vscode.commands.registerCommand('shellserver-vsc.sendto', () => {
 		let editor = vscode.window.activeTextEditor;
 		if (!editor) {
 			return; // No open text editor
