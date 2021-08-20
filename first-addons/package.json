@@ -1,7 +1,7 @@
 {
-	"name": "first-addons",
-	"displayName": "First_Addons",
-	"description": "first addons script",
+	"name": "sendto-vsc",
+	"displayName": "Sendto-vsc",
+	"description": "send cmd to socket server",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.22.0"
@@ -10,21 +10,32 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:first-addons.helloWorld",
-		"onCommand:first-addons.sendto"
+		"onCommand:sendto-vsc.setport",
+		"onCommand:sendto-vsc.sendto"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "first-addons.helloWorld",
-				"title": "Hello World"
+				"command": "sendto-vsc.setport",
+				"title": "Set Port"
 			},
 			{
-				"command": "first-addons.sendto",
+				"command": "sendto-vsc.sendto",
 				"title": "Send To"
 			}
+		],
+		"keybindings": [
+			{
+				"command": "sendto-vsc.sendto",
+				"key": "ctrl+shift+a"
+			},
+			{
+				"command": "sendto-vsc.setport",
+				"key": "shift+ctrl+e"
+			}
 		]
+			
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

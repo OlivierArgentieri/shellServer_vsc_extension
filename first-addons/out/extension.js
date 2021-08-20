@@ -17,55 +17,42 @@ const net = require('net');
 var client = new net.Socket();
 client.setEncoding('utf8');
 // send to async command to create cnx and send omd
-function init(text) {
+function send_to(text, port = 2017) {
     return __awaiter(this, void 0, void 0, function* () {
-        client.connect(2017, '127.0.0.1', function () {
+        client.connect(port, '127.0.0.1', () => {
             console.log('Connected');
             client.write(text);
             client.close();
         });
         client.on('close', () => {
             console.log("CLOSED");
+            client.destroy();
+            client.removeAllListeners();
         });
-    });
-}
-function send_to(text) {
-    return __awaiter(this, void 0, void 0, function* () {
-        console.log(text);
-        client.write('print("deux")');
-        client.write(Buffer.from(text, 'utf-8').toString());
     });
 }
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('first-addons.helloWorld', () => {
-        init("")
-            .then((a) => console.log("ok initialize cnx"))
-            .catch((err) => console.log(`err : ${err}`));
-        // The code you place here will be executed every time your command is executed
-        // Display a message box to the user
+    let tempPort = -1;
+    let setPortDisposable = vscode.commands.registerCommand('sendto-vsc.setport', function (event) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield vscode.window.showInputBox().then((value) => {
+                tempPort = Number(value);
+            });
+            console.log(tempPort);
+        });
     });
-    let sendToDisposable = vscode.commands.registerCommand('first-addons.sendto', () => {
-        var editor = vscode.window.activeTextEditor;
+    let sendToDisposable = vscode.commands.registerCommand('sendto-vsc.sendto', () => {
+        let editor = vscode.window.activeTextEditor;
         if (!editor) {
             return; // No open text editor
         }
-        var selection = editor.selection;
-        var text = editor.document.getText(selection);
-        init(text)
-            .then(() => console.log("ok"))
-            .catch((err) => console.log(`err : ${err}`));
-        // The code you place here will be executed every time your command is executed
-        // Display a message box to the user
-        vscode.window.showInformationMessage(text);
+        let selection = editor.selection;
+        let text = editor.document.getText(selection);
+        tempPort !== -1 ? send_to(text, tempPort).catch((err) => console.log(`err : ${err}`)) : send_to(text).catch((err) => console.log(`err : ${err}`));
     });
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(setPortDisposable);
     context.subscriptions.push(sendToDisposable);
 }
 exports.activate = activate;
