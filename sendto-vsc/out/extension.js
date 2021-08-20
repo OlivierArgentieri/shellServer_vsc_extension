@@ -21,8 +21,10 @@ function send_to(text, port = 2017) {
     return __awaiter(this, void 0, void 0, function* () {
         client.connect(port, '127.0.0.1', () => {
             console.log('Connected');
-            client.write(text);
-            client.close();
+            client.write(text, () => {
+                client.end();
+                client.destroy();
+            });
         });
         client.on('close', () => {
             console.log("CLOSED");
@@ -38,7 +40,9 @@ function activate(context) {
     let setPortDisposable = vscode.commands.registerCommand('sendto-vsc.setport', function (event) {
         return __awaiter(this, void 0, void 0, function* () {
             yield vscode.window.showInputBox().then((value) => {
-                tempPort = Number(value);
+                if (!isNaN(value)) {
+                    tempPort = Number(value);
+                }
             });
             console.log(tempPort);
         });
