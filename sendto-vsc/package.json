@@ -28,7 +28,7 @@
 		"keybindings": [
 			{
 				"command": "sendto-vsc.sendto",
-				"key": "ctrl+shift+a"
+				"key": "ctrl+e ctrl+e"
 			},
 			{
 				"command": "sendto-vsc.setport",
