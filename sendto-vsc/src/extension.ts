@@ -46,7 +46,6 @@ export function activate(context: vscode.ExtensionContext) {
 		tempPort !== -1 ? send_to(text, tempPort).catch((err) => console.log(`err : ${err}`)) : send_to(text).catch((err) => console.log(`err : ${err}`))
 	});
 
-
 	context.subscriptions.push(setPortDisposable);
 	context.subscriptions.push(sendToDisposable);
 }
