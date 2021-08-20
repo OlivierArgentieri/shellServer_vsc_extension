@@ -1,5 +1,5 @@
 {
-  "name": "first-addons",
+	"name": "first-addons",
 	"displayName": "First_Addons",
 	"description": "first addons script",
 	"version": "0.0.1",
@@ -10,7 +10,7 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:first-addons.helloWorld"
+		"onCommand:first-addons.helloWorld"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -41,5 +41,8 @@
 		"mocha": "^8.4.0",
 		"typescript": "^4.3.2",
 		"vscode-test": "^1.5.2"
+	},
+	"dependencies": {
+		"telnet-client": "^1.4.9"
 	}
 }
