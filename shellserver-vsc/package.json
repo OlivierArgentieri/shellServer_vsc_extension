@@ -36,7 +36,6 @@
 				"key": "shift+ctrl+e"
 			}
 		]
-			
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
