@@ -3,7 +3,7 @@
 Visual Studio Code extension for this -> [ShellServer](https://github.com/OlivierArgentieri-rezpackages/shellServer) 
 
 <p align="center">
-  <img src="https://github.com/OlivierArgentieri/shellServer_vsc_extension/raw/main/gif/Header.gif" />
+  <img src="./gif/Header.gif" />
 </p>
 
 ## Get Started

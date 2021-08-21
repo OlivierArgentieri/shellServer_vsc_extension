@@ -3,7 +3,8 @@
 	"displayName": "ShellServer-vsc",
 	"description": "send python cmd to shellServer",
 	"publisher": "OlivierArgentieri",
-	"version": "0.0.1",
+	"version": "0.0.5",
+	"repository": "https://github.com/OlivierArgentieri/shellServer_vsc_extension",
 	"engines": {
 		"vscode": "^1.22.0"
 	},
