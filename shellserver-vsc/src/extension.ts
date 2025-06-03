@@ -7,14 +7,37 @@ var client = new net.Socket();
 
 client.setEncoding('utf8');
 
+const PAYLOAD = `
+import __main__
+import traceback
+
+namespace = __main__.__dict__.get('_vsc_sendto_plugin')
+if not namespace:
+    namespace = __main__.__dict__.copy()
+    __main__.__dict__['_vsc_sendto_plugin'] = namespace
+try:
+    {xtype}({cmd!r}, __main__.__dict__, __main__.__dict__)
+except:
+    traceback.print_exc()
+`;
+
 
 // send to async command to create cnx and send omd
-async function send_to(text: string, port:number = 2017) {
+async function send_to(cmd: string, port:number = 2017) {
+	const xtype = 'exec'; // 'exec' or 'eval'
+	if (!cmd) {
+		return;
+	}
+	const payload = PAYLOAD
+		.replace('{xtype}', xtype)
+		.replace('{cmd!r}', JSON.stringify(cmd));
+	const text = Buffer.from(payload, 'utf8');
+
 	client.connect(port, '127.0.0.1', () => {
 		console.log('Connected');
-		client.write(text, () =>{
 			client.end()
 			client.destroy()
+		client.write(text, (err: any) => {
 		});
 	});
 	client.on('close', () =>{
