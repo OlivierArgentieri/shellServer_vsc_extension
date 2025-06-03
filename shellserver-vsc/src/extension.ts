@@ -1,27 +1,50 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-const net = require('net')
+const net = require('net');
 
 var client = new net.Socket();
 
 client.setEncoding('utf8');
 
+const PAYLOAD = `
+import __main__
+import traceback
+
+namespace = __main__.__dict__.get('_vsc_sendto_plugin')
+if not namespace:
+    namespace = __main__.__dict__.copy()
+    __main__.__dict__['_vsc_sendto_plugin'] = namespace
+try:
+    {xtype}({cmd!r}, __main__.__dict__, __main__.__dict__)
+except:
+    traceback.print_exc()
+`;
+
 
 // send to async command to create cnx and send omd
-async function send_to(text: string, port:number = 2017) {
+async function send_to(cmd: string, port:number = 2017) {
+	const xtype = 'exec'; // 'exec' or 'eval'
+	if (!cmd) {
+		return;
+	}
+	const payload = PAYLOAD
+		.replace('{xtype}', xtype)
+		.replace('{cmd!r}', JSON.stringify(cmd));
+	const text = Buffer.from(payload, 'utf8');
+
 	client.connect(port, '127.0.0.1', () => {
 		console.log('Connected');
-		client.write(text, () =>{
-			client.end()
-			client.destroy()
+		client.write(text, (err: any) => {
+			client.end();
+			client.destroy();
 		});
 	});
 	client.on('close', () =>{
-		console.log("CLOSED")
-		client.destroy()
-		client.removeAllListeners()
-	})
+		console.log("CLOSED");
+		client.destroy();
+		client.removeAllListeners();
+	});
 }
 
 // this method is called when your extension is activated
@@ -31,7 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let setPortDisposable = vscode.commands.registerCommand('shellserver-vsc.setport', async function (event) {
 		await vscode.window.showInputBox().then((value:any) =>{
 			if(!isNaN(value)) {
-				tempPort = Number(value)
+				tempPort = Number(value);
 			}
 		});
 		console.log(tempPort);
