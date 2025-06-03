@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-const net = require('net')
+const net = require('net');
 
 var client = new net.Socket();
 
@@ -35,16 +35,16 @@ async function send_to(cmd: string, port:number = 2017) {
 
 	client.connect(port, '127.0.0.1', () => {
 		console.log('Connected');
-			client.end()
-			client.destroy()
 		client.write(text, (err: any) => {
+			client.end();
+			client.destroy();
 		});
 	});
 	client.on('close', () =>{
-		console.log("CLOSED")
-		client.destroy()
-		client.removeAllListeners()
-	})
+		console.log("CLOSED");
+		client.destroy();
+		client.removeAllListeners();
+	});
 }
 
 // this method is called when your extension is activated
@@ -54,7 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let setPortDisposable = vscode.commands.registerCommand('shellserver-vsc.setport', async function (event) {
 		await vscode.window.showInputBox().then((value:any) =>{
 			if(!isNaN(value)) {
-				tempPort = Number(value)
+				tempPort = Number(value);
 			}
 		});
 		console.log(tempPort);
