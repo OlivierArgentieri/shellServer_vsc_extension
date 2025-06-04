@@ -24,53 +24,53 @@ except:
 
 // send to async command to create cnx and send omd
 async function send_to(cmd: string, port:number = 2017) {
-	const xtype = 'exec'; // 'exec' or 'eval'
-	if (!cmd) {
-		return;
-	}
-	const payload = PAYLOAD
-		.replace('{xtype}', xtype)
-		.replace('{cmd!r}', JSON.stringify(cmd));
-	const text = Buffer.from(payload, 'utf8');
+    const xtype = 'exec'; // 'exec' or 'eval'
+    if (!cmd) {
+        return;
+    }
+    const payload = PAYLOAD
+        .replace('{xtype}', xtype)
+        .replace('{cmd!r}', JSON.stringify(cmd));
+    const text = Buffer.from(payload, 'utf8');
 
-	client.connect(port, '127.0.0.1', () => {
-		console.log('Connected');
-		client.write(text, (err: any) => {
-			client.end();
-			client.destroy();
-		});
-	});
-	client.on('close', () =>{
-		console.log("CLOSED");
-		client.destroy();
-		client.removeAllListeners();
-	});
+    client.connect(port, '127.0.0.1', () => {
+        console.log('Connected');
+        client.write(text, (err: any) => {
+            client.end();
+            client.destroy();
+        });
+    });
+    client.on('close', () =>{
+        console.log("CLOSED");
+        client.destroy();
+        client.removeAllListeners();
+    });
 }
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	let tempPort = -1;
-	let setPortDisposable = vscode.commands.registerCommand('shellserver-vsc.setport', async function (event) {
-		await vscode.window.showInputBox().then((value:any) =>{
-			if(!isNaN(value)) {
-				tempPort = Number(value);
-			}
-		});
-		console.log(tempPort);
-	});
+    let tempPort = -1;
+    let setPortDisposable = vscode.commands.registerCommand('shellserver-vsc.setport', async function (event) {
+        await vscode.window.showInputBox().then((value:any) =>{
+            if(!isNaN(value)) {
+                tempPort = Number(value);
+            }
+        });
+        console.log(tempPort);
+    });
 
-	let sendToDisposable = vscode.commands.registerCommand('shellserver-vsc.sendto', () => {
-		let editor = vscode.window.activeTextEditor;
-		if (!editor) {
-			return; // No open text editor
-		}
+    let sendToDisposable = vscode.commands.registerCommand('shellserver-vsc.sendto', () => {
+        let editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return; // No open text editor
+        }
 
-		let selection = editor.selection;
-		let text = editor.document.getText(selection);tempPort !== -1 ? send_to(text, tempPort).catch((err) => console.log(`err : ${err}`)) : send_to(text).catch((err) => console.log(`err : ${err}`));
-	});
-	context.subscriptions.push(setPortDisposable);
-	context.subscriptions.push(sendToDisposable);
+        let selection = editor.selection;
+        let text = editor.document.getText(selection);tempPort !== -1 ? send_to(text, tempPort).catch((err) => console.log(`err : ${err}`)) : send_to(text).catch((err) => console.log(`err : ${err}`));
+    });
+    context.subscriptions.push(setPortDisposable);
+    context.subscriptions.push(sendToDisposable);
 }
 
 // this method is called when your extension is deactivated
